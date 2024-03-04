@@ -1,0 +1,11 @@
+,trend_follower_plus_bias,trend_follower_plus_bias_plus_fundamentalists,trend_follower_plus_bias_plus_LSTM
+g,1.91,2.86,1.91
+tstatg,(121.69),(121.53),(86.25)
+b,0.58,0.87,0.7
+tstatb,(6.5),(6.51),(5.53)
+beta,1.05,0.52,1.33
+tstat_beta,(2.23),(2.23),(1.98)
+adj_r2,0.94,0.94,0.95
+F,5.05,5.17,4.03
+p,(0.02),(0.02),(0.04)
+het,0.17,0.17,0.16
