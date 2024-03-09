@@ -3,6 +3,6 @@
 "b": 1.0,
 "R": 1.01,
 "T": 1000,
-"beta_low": 4.0,
+"beta_low": 5.0,
 "beta_high": 8.0,
 "bifurcation_L": 500}

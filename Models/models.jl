@@ -182,7 +182,6 @@ end
 
 #### Plotting functions 
 function phase_plots(x,y;
-    figsize = (1600, 900),
     L = 252,
     savefile = nothing
     )
@@ -201,14 +200,14 @@ function phase_plots(x,y;
     cmap = reverse(cmap)
     
     for i in range(1,length(x))
-        scatter!(y1[i][end-301:end-1], y1[i][end-300:end], markersize = 1, color = cmap[i],legend=false,markerstrokewidth=0)
+        scatter!(y1[i][end-301:end-1], y1[i][end-300:end], markersize = 0.5, color = cmap[i],legend=false,markerstrokewidth=0)
     end
  
     p2 = plot([NaN], lims=(0,1), framestyle=:none, legend = false)
-    annotate!(-0.2, -0.2, text("β", 36, "Computer Modern"))
+    annotate!(-0.2, -0.2, text("β", :black))
     
     p3 = heatmap(rand(2,2), clims=(a0,a1), framestyle=:none, c=cmap, cbar=true, lims=(-1,0), yflip=true)
-    S = plot(s, p2, p3, layout=l, size = figsize, margin = 15Plots.mm)
+    S = plot(s, p2, p3, layout=l)
     if savefile !== nothing
         savefig(S, savefile)
     end
@@ -234,9 +233,12 @@ function plot_lyapunov(ds, beta_range;
 
     lyap = plot(
         aspace, λs, 
-        xlabel = "β", ylabel = "Lyapunov Exponent", label = nothing, linewidth = linewidth,
-        size = figsize,
-        margin = 15Plots.mm
+        xlabel = "β", ylabel = "Lyapunov Exponent", label = nothing, color=:black, 
+        linewidth=2, 
+        linestyle=:solid, 
+        marker=(:circle, 4),
+        grid=true, 
+        legend=:topright,
     )
     if savefile !== nothing
         savefig(lyap, savefile)
@@ -245,10 +247,9 @@ function plot_lyapunov(ds, beta_range;
 end
 
 function eigenvalues_plot(params, beta_range; 
-    param_index = 1, #Index of the parameter to vary
+    param_index = 1,
+    linewidth = 2, 
     model = "fundamentalist", #Model to use
-    figsize = (900, 600),
-    linewidth = 4,
     savefile = nothing) #Name of the file to save the plot
     L = length(beta_range) # Number of points
     # Check that the model is either "fundamentalist" or "trend_plus_bias"
@@ -276,8 +277,9 @@ function eigenvalues_plot(params, beta_range;
     # Plot the data
     eigen = plot(
         P, mod_λ₁, label = L"|(\lambda_1)|", linewidth = linewidth, 
-        xlabel = "β", ylabel = "Modulus of eigenvalues", size = figsize, margin = 15Plots.mm, alpha = 0.5
-    )
+        xlabel = "β", ylabel = "Modulus of eigenvalues", alpha = 0.5,
+        grid=true, 
+        legend=:topright,)
     plot!(P, mod_λ₂, label = L"\|(\lambda_2)|", linewidth = linewidth, alpha = 1.0)
     plot!(P, mod_λ₃, label = L"|(\lambda_3)|", linewidth = linewidth, alpha = 0.5)
     hline!([1], label = nothing, linewidth = linewidth, linestyle = :dash, linecolor = :black)
@@ -317,17 +319,15 @@ function plot_evolution_and_fraction(X, rational;
 end
 
 function scatter_bifurcation(x,y;
-    figsize = (1600, 900),
     savefile = nothing
     )
     bifurcation = scatter(fill(x[1], length(y[1])), y[1],
     	xaxis = L"$\beta$", ylabel = L"x", 
-    	ms = 1.5, color = :black, legend = nothing,
-    	alpha = .050, size = figsize,
-        margin = 15Plots.mm
+    	ms = 0.5, color = :black, legend = nothing,
+    	alpha = .050
     )
     for j in 2:length(x)
-        scatter!(bifurcation, fill(x[j], length(y[j])), y[j],ms = 1.5, color = :black, legend = nothing,
+        scatter!(bifurcation, fill(x[j], length(y[j])), y[j],ms = 0.5, color = :black, legend = nothing,
     	alpha = .050)
     end
 
