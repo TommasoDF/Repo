@@ -5,7 +5,7 @@ include("models.jl")
 function generate_bifurcation_data_rational()
     initial_conditions = [1.3, 1.2, 1.1]
     time_series_list, error_list = compute_bifurcation_ft(beta_range, parameters, initial_conditions, generate_dynamics_rational_speculators, N= 10)
-    data = [beta_range, time_series_list]
+    data = [beta_range, time_series_list, error_list]
     save_object("Data/bifurcation_rational.jld2", data)
 end
 
