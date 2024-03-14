@@ -41,7 +41,7 @@ function trend_plus_bias_plus_fundamentalist(states, params, n) # here `n` is "t
     return SVector(nextstate_1, nextstate_2, nextstate_3, nextstate_4, nextstate_5, nextstate_6)
 end
 
-function generate_dynamics_rational_speculators(expectations, params, inital_conditions)
+function generate_dynamics_rational_speculators(expectations, params, inital_conditions; noise = 0)
     # Define the parameters
     β, g, b, R = params
     # Define the initial conditions
@@ -78,7 +78,7 @@ function generate_dynamics_rational_speculators(expectations, params, inital_con
         fractions_2_array[t] = exp(β * profits_2_array[t])/Z
         fractions_3_array[t] = exp(β * profits_3_array[t])/Z
         # Define the current state
-        x_array[t] = (fractions_1_array[t] * g * x_minus_1_array[t] + fractions_2_array[t] * b + fractions_3_array[t] * exp_plus_1)/R
+        x_array[t] = randn()*noise + (fractions_1_array[t] * g * x_minus_1_array[t] + fractions_2_array[t] * b + fractions_3_array[t] * exp_plus_1)/R
         # Update the state
         x_minus_3_array[t+1] = x_minus_2_array[t]
         x_minus_2_array[t+1] = x_minus_1_array[t]
@@ -330,6 +330,50 @@ function scatter_bifurcation(x,y;
         scatter!(bifurcation, fill(x[j], length(y[j])), y[j],ms = 0.5, color = :black, legend = nothing,
     	alpha = .050)
     end
+
+    if savefile !== nothing
+        savefig(bifurcation, savefile)
+    end
+    return bifurcation
+end
+
+function overlay_bifurcations(x, y1, y2, y3;
+color1 = :black, color2 = :black, color3 = :black,
+size = (300, 200),
+savefile = nothing)
+# add x to itself to make it from lenght 500 to 500*1000
+x = repeat(x, inner = length(y1[1]))
+y1 = vcat(y1...)
+y2 = vcat(y2...)
+#make every element of y3 of length 1000
+for j in 1:length(y3)
+    y3[j] = y3[j][end-999:end]
+end
+y = vcat(y_r...)
+bifurcation1 = scatter(x, y1,
+    	xaxis = L"$\beta$", ylabel = L"x", 
+    	ms = 0.5, color = color1, legend = nothing,
+    	alpha = .1, size = size
+    )
+    scatter!(bifurcation1, x, y, ms = 0.5, color = color3, legend = nothing,
+    	alpha = .2)
+    # Change x_f and y_f shape from a vector of lenght 500 with elements of lenght 1000 to a vector of lenght 500*1000
+    bifurcation = scatter!(twinx(), x, y2,ms = 0.5, color = color2, legend = nothing,
+    	alpha = .050)
+
+    # bifurcation2 = scatter(fill(x[1], length(y2[1])), y2[1],
+    # xaxis = L"$\beta$", ylabel = L"x", 
+    # ms = 0.5, color = color2, legend = nothing,
+    # alpha = .050)
+
+    # for j in 2:length(x)
+    #     scatter!(bifurcation2, fill(x[j], length(y2[j])), y2[j],ms = 0.5, color = color2, legend = nothing,
+    # 	alpha = .050)
+    #     # scatter by twinx the axes
+    # end
+
+    # # overlay the two plots side by side
+    # overlay_plot = plot(bifurcation1, bifurcation2, layout = (1,2))
 
     if savefile !== nothing
         savefig(bifurcation, savefile)

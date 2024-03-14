@@ -1,4 +1,4 @@
-using JLD2, JSON
+using JLD2, JSON, CSV, DataFrames
 include("models.jl")
 
 ### Generate data for the two type model
@@ -28,7 +28,18 @@ function generate_data_rational()
     initial_conditions = [1.3, 1.2, 1.1]
     expectations = fair_taylor_iteration(generate_dynamics_rational_speculators, parameters, initial_conditions, 100, 10, T)
     X = generate_dynamics_rational_speculators(expectations, parameters, initial_conditions)
-    save_object("Data/X_rational.jld2", X)
+    save_object("Data/X_rational_unstable.jld2", X)
+end
+
+function generate_data_simulated()
+    initial_conditions = [1.3, 1.2, 1.1]
+    expectations = fair_taylor_iteration(generate_dynamics_rational_speculators, parameters, initial_conditions, 100, 10, T)
+    X = generate_dynamics_rational_speculators(expectations, parameters, initial_conditions, noise = 0.1)
+    data = X[1]
+    # save data to a CSV file in the Data folder
+    CSV.write("Data/simulated_data.csv", DataFrame(data = data))
+    return data
+
 end
 
 # import the parameters
@@ -40,6 +51,6 @@ R =  dict["R"]
 parameters = [beta, g, b, R]
 T = dict["T"]
 
-generate_data_two_types()
-generate_data_fundamentalist()
-generate_data_rational()
+#generate_data_two_types()
+#generate_data_fundamentalist()
+data = generate_data_simulated()

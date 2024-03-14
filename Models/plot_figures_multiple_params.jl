@@ -2,9 +2,9 @@ include("models.jl")
 using JLD2, JSON, Colors
 
 # Define colors
-c1 = RGB(10/255, 9/255, 8/255)
-c2 = RGB(34/255, 51/255, 59/255)
-c3 = RGB(234/255, 224/255, 213/255)
+c1 = RGB(38/255, 70/255, 83/255)
+c2 = RGB(42/255, 157/255, 143/255)
+c3 = RGB(233/255, 196/255, 106/255)
 c4 = RGB(198/255, 172/255, 143/255)
 c5 = RGB(94/255, 80/255, 63/255)
 
@@ -33,6 +33,7 @@ function speculations_effect()
     plot!(x_r, mean_r, ribbon =  sqrt.(var_r), color = c5, fillalpha = 0.2, label = "")
     savefig(A, "Figures/mean.pdf")
 end
+
 
 # import the parameters
 dict = JSON.parsefile("params.json")
@@ -72,4 +73,7 @@ ds_f = load_object("Data/ds_fundamentalist.jld2")
 
 #compare the mean and var over the 3 models
 #speculations_effect()
-plot_error()
+#plot_error()
+overlay_bifurcations(x_b, y_b, y_f, y_r, color1 = c3, color2 = :black, color3 = c2,
+ savefile = "Figures/bifurcation_all.png", size = (800,450))
+

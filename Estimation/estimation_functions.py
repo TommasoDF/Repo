@@ -29,55 +29,59 @@ color_blue = '#75BDF7'
 color_orange = '#E57650'
 
 def trend_follower_plus_bias(x, g, b, beta):
-    #y = p(t)/p(t-2), x0 = w(t-1)/p(t-2), x1 = p(t-1)/p(t-2), x2 = w(t-3)
-    # x3 = p(t-3), x4 = p(t-1), x5 = p(t-2), x6 = R_t, x7 = R(t-2), x[8] = sigma
+    #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
+    # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
+    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
     #Chatch the overflow error
-    fitness_1 = (x[4] - x[7]*x[5]) * (g * x[3] - x[7]*x[5])/ x[8]  #-((g * x[3] - x[4])**2)
-    fitness_2 = (x[4] - x[7]*x[5]) * (b * x[2] - x[7]*x[5])/ x[8]
+    fitness_1 = (x[12] - x[8]*x[1]) * (g * x[2] - x[8]*x[1])/ x[11]
+    fitness_2 = (x[12] - x[8]*x[1]) * (b * x[5] - x[8]*x[1])/ x[11]
     n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)))
-    return  (g* x[1] * n1 + b*x[0] * (1-n1))/x[6]
+    return  (g* x[0] * n1 + b*x[3] * (1-n1))/x[6]
 
 
 def trend_follower_plus_bias_fractions(x, g, b, beta, a = 5.5):
-    #y = p(t)/p(t-2), x0 = w(t-1)/p(t-2), x1 = p(t-1)/p(t-2), x2 = w(t-3)
-    # x3 = p(t-3), x4 = p(t-1), x5 = p(t-2), x6 = R_t, x7 = R(t-2), x[8] = sigma
+    #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
+    # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
+    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2 x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
     #Chatch the overflow error
-    fitness_1 = (x[4] - x[7]*x[5]) * (g * x[3] - x[7]*x[5])/ x[8]  #-((g * x[3] - x[4])**2)
-    fitness_2 = (x[4] - x[7]*x[5]) * (b * x[2] - x[7]*x[5])/ x[8]
+    fitness_1 = (x[12] - x[8]*x[1]) * (g * x[2] - x[8]*x[1])/ x[11]
+    fitness_2 = (x[12] - x[8]*x[1]) * (b * x[5] - x[8]*x[1])/ x[11]
     n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)))
     return  n1, (1-n1)
 
 def trend_follower_plus_bias_plus_fundamentalists(x, g, b, beta):
-    #y = p(t)/p(t-2), x0 = w(t-1)/p(t-2), x1 = p(t-1)/p(t-2), x2 = w(t-3)
-    # x3 = p(t-3), x4 = p(t-1), x5 = p(t-2), x6 = R_t, x7 = R(t-2), x[8] = sigma
+   #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
+    # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
+    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
     #Chatch the overflow error
-    fitness_1 = (x[4] - x[7]*x[5]) * (g * x[3] - x[7]*x[5])/x[8]  #-((g * x[3] - x[4])**2)
-    fitness_2 = (x[4] - x[7]*x[5]) * (b * x[2] - x[7]*x[5])/x[8]  #-((b * x[2]  - x[4])**2)
-    fitness_3 = (x[4] - x[7]*x[5]) * (0 - x[7]*x[5])/x[8] #-((0 - x[4])**2)
+    fitness_1 = (x[12] - x[8]*x[1]) * (g * x[2] - x[8]*x[1])/ x[11]
+    fitness_2 = (x[12] - x[8]*x[1]) * (b * x[5] - x[8]*x[1])/ x[11]
+    fitness_3 = (x[12] - x[8]*x[1]) * (0 - x[8]*x[1])/ x[11]
     n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n2 = np.exp(beta * (fitness_2))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n3 = np.exp(beta * (fitness_3))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
-    return  (g* x[1] * n1 + b*x[0] * (n2))/x[6]
+    return  (g* x[0] * n1 + b*x[3] * (n2))/x[6]
 
 def trend_follower_plus_bias_plus_fundamentalists_fractions(x, g, b, beta):
-#y = p(t)/p(t-2), x0 = w(t-1)/p(t-2), x1 = p(t-1)/p(t-2), x2 = w(t-3)
-    # x3 = p(t-3), x4 = p(t-1), x5 = p(t-2), x6 = R_t, x7 = R(t-2), x[8] = sigma
+#y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
+    # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
+    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
     #Chatch the overflow error
-    fitness_1 = (x[4] - x[7]*x[5]) * (g * x[3] - x[7]*x[5])/x[8]  #-((g * x[3] - x[4])**2)
-    fitness_2 = (x[4] - x[7]*x[5]) * (b * x[2] - x[7]*x[5])/x[8]  #-((b * x[2]  - x[4])**2)
-    fitness_3 = (x[4] - x[7]*x[5]) * (0 - x[7]*x[5])/x[8] #-((0 - x[4])**2)
+    fitness_1 = (x[12] - x[8]*x[1]) * (g * x[2] - x[8]*x[1])/ x[11]
+    fitness_2 = (x[12] - x[8]*x[1]) * (b * x[5] - x[8]*x[1])/ x[11]
+    fitness_3 = (x[12] - x[8]*x[1]) * (0 - x[8]*x[1])/ x[11]
     n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n2 = np.exp(beta * (fitness_2))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n3 = np.exp(beta * (fitness_3))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
@@ -85,30 +89,48 @@ def trend_follower_plus_bias_plus_fundamentalists_fractions(x, g, b, beta):
 
 
 def trend_follower_plus_bias_plus_LSTM(x, g, b, beta):
-     #y = p(t)/p(t-2), x0 = w(t-1)/p(t-2), x1 = p(t-1)/p(t-2), x2 = w(t-3)
-    # x3 = p(t-3), x4 = p(t-1), x5 = p(t-2), x6 = R_t, x7 = R(t-2), x[8] = sigma
+    #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
+    # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
+    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
     #Chatch the overflow error
-    fitness_1 = (x[4] - x[7]*x[5]) * (g * x[3] - x[7]*x[5])/x[8]  #-((g * x[3] - x[4])**2)
-    fitness_2 = (x[4] - x[7]*x[5]) * (b * x[2] - x[7]*x[5])/x[8]  #-((b * x[2]  - x[4])**2)
-    fitness_3 = (x[4] - x[7]*x[5]) * (x[10] - x[7]*x[5])/x[8] #-((0 - x[4])**2)
+    fitness_1 = (x[12] - x[8]*x[1]) * (g * x[2] - x[8]*x[1])/ x[11]
+    fitness_2 = (x[12] - x[8]*x[1]) * (b * x[5] - x[8]*x[1])/ x[11]
+    fitness_3 = (x[12] - x[8]*x[1]) * (x[10] - x[8]*x[1])/ x[11]
     n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n2 = np.exp(beta * (fitness_2))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n3 = np.exp(beta * (fitness_3))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
-    return  (g* x[1] * n1 + b*x[0] * (n2) + x[9]*n3)/x[6]
+    return  (g* x[0] * n1 + b*x[3] * (n2) + x[9]*n3)/x[6]
 
-def trend_follower_plus_bias_plus_LSTM_fractions(x, g, b, beta):
-     #y = p(t)/p(t-2), x0 = w(t-1)/p(t-2), x1 = p(t-1)/p(t-2), x2 = w(t-3)
-    # x3 = p(t-3), x4 = p(t-1), x5 = p(t-2), x6 = R_t, x7 = R(t-2), x[8] = sigma
+def trend_follower_plus_bias_plus_LSTM_simulated(x, g, b, beta):
+    #y = x(t), x0 = x(t-1), x1 = x(t-2), x2 = x(t-3)
+    # x3 =  LSTM(t+1), x4 = LSTM(t-2), x5 = R
     # g = params[0]
     # b = params[1]
     # beta = params[2]
     #Chatch the overflow error
-    fitness_1 = (x[4] - x[7]*x[5]) * (g * x[3] - x[7]*x[5])/x[8]  #-((g * x[3] - x[4])**2)
-    fitness_2 = (x[4] - x[7]*x[5]) * (b * x[2] - x[7]*x[5])/x[8]  #-((b * x[2]  - x[4])**2)
-    fitness_3 = (x[4] - x[7]*x[5]) * (x[10] - x[7]*x[5])/x[8] #-((0 - x[4])**2)
+    fitness_1 = (x[0] - x[5]*x[1]) * (g * x[2] - x[5]*x[1])
+    fitness_2 = (x[0] - x[5]*x[1]) * (b - x[5]*x[1])
+    fitness_3 = (x[0] - x[5]*x[1]) * (x[4] - x[5]*x[1])
+    n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
+    n2 = np.exp(beta * (fitness_2))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
+    n3 = np.exp(beta * (fitness_3))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
+    return  (g* x[0] * n1 + b * (n2) + x[3]*n3)/x[5]
+
+
+def trend_follower_plus_bias_plus_LSTM_fractions(x, g, b, beta):
+    #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
+    # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
+    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
+    # g = params[0]
+    # b = params[1]
+    # beta = params[2]
+    #Chatch the overflow error
+    fitness_1 = (x[12] - x[8]*x[1]) * (g * x[2] - x[8]*x[1])/ x[11]
+    fitness_2 = (x[12] - x[8]*x[1]) * (b * x[5] - x[8]*x[1])/ x[11]
+    fitness_3 = (x[12] - x[8]*x[1]) * (x[10] - x[8]*x[1])/ x[11]
     n1 = np.exp(beta * (fitness_1))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n2 = np.exp(beta * (fitness_2))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     n3 = np.exp(beta * (fitness_3))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
@@ -139,7 +161,7 @@ def compute_r2_and_residuals(model, popt, x_data, y_data):
     return residuals, ssres, adj_r_squared
 
 def fit_AR_model(df):
-    X = [df['x0'], df['x1']]
+    X = [df['x0'], df['x3']]
     X = np.transpose(X)
     y = df['y']*df['x6']
     model = sm.OLS(y, X)
@@ -147,7 +169,7 @@ def fit_AR_model(df):
     return results.ssr
 
 def fit_AR_model_LSTM(df):
-    X = [df['x0'], df['x1']]
+    X = [df['x0'], df['x3']]
     X = np.transpose(X)
     y = (df['y']*df['x6']) - (1/3)*df['x9']
     model = sm.OLS(y, X)
@@ -219,7 +241,7 @@ def main():
     df = df.dropna()
 
     #Define x_data and y_da
-    x_data = [df['x0'], df['x1'], df['x2'], df['x3'], df['x4'], df['x5'], df['x6'], df['x7'], df['x8'], df['x9'], df['x10']]
+    x_data = [df['x0'], df['x1'], df['x2'], df['x3'], df['x4'], df['x5'], df['x6'], df['x7'], df['x8'], df['x9'], df['x10'], df['x11'], df['x12']]
     y_data = df['y']
 
     # Estimate the parameters
