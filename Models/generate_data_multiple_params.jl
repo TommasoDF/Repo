@@ -1,6 +1,8 @@
 using JLD2, JSON
 include("models.jl")
 
+
+
 # Generate bifurcation data for the rational speculators model
 function generate_bifurcation_data_rational()
     initial_conditions = [1.3, 1.2, 1.1]

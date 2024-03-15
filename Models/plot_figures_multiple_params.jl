@@ -1,6 +1,7 @@
 include("models.jl")
-using JLD2, JSON, Colors
+using JLD2, JSON, Colors, Plots
 
+default(fontfamily = "Computer Modern", framestyle = :box)
 # Define colors
 c1 = RGB(38/255, 70/255, 83/255)
 c2 = RGB(42/255, 157/255, 143/255)
@@ -10,7 +11,7 @@ c5 = RGB(94/255, 80/255, 63/255)
 
 function plot_error()
     plot(x_r, error_r, linewidth = 2, xlabel = L"\beta", color = c2, label = "")
-    savefig("Figures/error.pdf")
+    savefig("Figures/error.png")
 end
 
 function speculations_effect()
@@ -53,27 +54,26 @@ ds_f = load_object("Data/ds_fundamentalist.jld2")
 
 # # #plot bifurcation
 #gr(size=(400, 400))
-# scatter_bifurcation(x_b, y_b, savefile = "Figures/bifurcation_two_types.pdf")
-# scatter_bifurcation(x_f, y_f, savefile = "Figures/bifurcation_fundamentalist.pdf")
-# scatter_bifurcation(x_r, y_r, savefile = "Figures/bifurcation_rational.pdf")
+scatter_bifurcation(x_b, y_b, savefile = "Figures/bifurcation_two_types.png")
+scatter_bifurcation(x_f, y_f, savefile = "Figures/bifurcation_fundamentalist.png")
+scatter_bifurcation(x_r, y_r, savefile = "Figures/bifurcation_rational.png")
 
 # #plot phase_diagram
 # gr(size=(300, 300))
-# phase_plots(x_b, y_b, savefile = "Figures/phase_diagram_two_types.pdf")
-# phase_plots(x_f, y_f, savefile = "Figures/phase_diagram_fundamentalist.pdf")
-# phase_plots(x_r, y_r, savefile = "Figures/phase_diagram_rational.pdf")
+phase_plots(x_b, y_b, savefile = "Figures/phase_diagram_two_types.png")
+phase_plots(x_f, y_f, savefile = "Figures/phase_diagram_fundamentalist.png")
+phase_plots(x_r, y_r, savefile = "Figures/phase_diagram_rational.png")
 
 # #plot the eigenvalues
-# eigenvalues_plot(parameters, x_b, model = "trend_plus_bias", savefile = "Figures/eigenvalues_two_types.pdf")
-# eigenvalues_plot(parameters, x_f, savefile = "Figures/eigenvalues_fundamentalist.pdf")
+plot_c = eigenvalues_plot(parameters, x_b, model = "trend_plus_bias", savefile = "Figures/eigenvalues_two_types.png")
+eigenvalues_plot(parameters, x_f, savefile = "Figures/eigenvalues_fundamentalist.png")
 
 # #Lyapunov exponent
-# plot_lyapunov(ds_b, x_b, savefile = "Figures/lyapunov_two_types.pdf")
-# plot_lyapunov(ds_f, x_f, savefile = "Figures/lyapunov_fundamentalist.pdf")
+plot_d = plot_lyapunov(ds_b, x_b, savefile = "Figures/lyapunov_two_types.png")
+plot_lyapunov(ds_f, x_f, savefile = "Figures/lyapunov_fundamentalist.png")
 
 #compare the mean and var over the 3 models
 #speculations_effect()
-#plot_error()
-overlay_bifurcations(x_b, y_b, y_f, y_r, color1 = c3, color2 = :black, color3 = c2,
- savefile = "Figures/bifurcation_all.png", size = (800,450))
-
+plot_error()
+#overlay_bifurcations(x_b, y_b, y_f, y_r, color1 = c3, color2 = :black, color3 = c2,
+# savefile = "Figures/bifurcation_all.png", size = (800,450))

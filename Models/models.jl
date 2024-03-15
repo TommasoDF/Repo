@@ -182,6 +182,7 @@ end
 
 #### Plotting functions 
 function phase_plots(x,y;
+    title = "Phase Diagram",
     L = 252,
     savefile = nothing
     )
@@ -190,7 +191,7 @@ function phase_plots(x,y;
     x1 = x[1:end]
     y1 = y[1:end]
 
-    s = scatter()
+    s = scatter(title = title)
     xlabel!(L"x_{t-1}")
     ylabel!(L"x_t")          
     #create a color palette, similar to viridis
@@ -204,7 +205,7 @@ function phase_plots(x,y;
     end
  
     p2 = plot([NaN], lims=(0,1), framestyle=:none, legend = false)
-    annotate!(-0.2, -0.2, text("β", :black))
+    annotate!(-0.1, -0.1, text(L"β", :black))
     
     p3 = heatmap(rand(2,2), clims=(a0,a1), framestyle=:none, c=cmap, cbar=true, lims=(-1,0), yflip=true)
     S = plot(s, p2, p3, layout=l)
@@ -217,6 +218,7 @@ end
 
 #Generate the Lyapunov Exponents plot
 function plot_lyapunov(ds, beta_range; 
+    title = "Maximum Lyapunov Exponent",
     n = 8_000, 	# Number of points
     aindex = 1, 	# Index of the parameter in the dynamical DynamicalSystem
     figsize = (900, 600),
@@ -236,9 +238,9 @@ function plot_lyapunov(ds, beta_range;
         xlabel = "β", ylabel = "Lyapunov Exponent", label = nothing, color=:black, 
         linewidth=2, 
         linestyle=:solid, 
-        marker=(:circle, 4),
         grid=true, 
         legend=:topright,
+        title = title
     )
     if savefile !== nothing
         savefig(lyap, savefile)
@@ -247,6 +249,7 @@ function plot_lyapunov(ds, beta_range;
 end
 
 function eigenvalues_plot(params, beta_range; 
+    title = "Eigenvalues",
     param_index = 1,
     linewidth = 2, 
     model = "fundamentalist", #Model to use
@@ -279,7 +282,7 @@ function eigenvalues_plot(params, beta_range;
         P, mod_λ₁, label = L"|(\lambda_1)|", linewidth = linewidth, 
         xlabel = "β", ylabel = "Modulus of eigenvalues", alpha = 0.5,
         grid=true, 
-        legend=:topright,)
+        legend=:topright, title = title)
     plot!(P, mod_λ₂, label = L"\|(\lambda_2)|", linewidth = linewidth, alpha = 1.0)
     plot!(P, mod_λ₃, label = L"|(\lambda_3)|", linewidth = linewidth, alpha = 0.5)
     hline!([1], label = nothing, linewidth = linewidth, linestyle = :dash, linecolor = :black)
@@ -319,12 +322,13 @@ function plot_evolution_and_fraction(X, rational;
 end
 
 function scatter_bifurcation(x,y;
+    title = "Bifurcation Diagram",
     savefile = nothing
     )
     bifurcation = scatter(fill(x[1], length(y[1])), y[1],
     	xaxis = L"$\beta$", ylabel = L"x", 
     	ms = 0.5, color = :black, legend = nothing,
-    	alpha = .050
+    	alpha = .050, title = title
     )
     for j in 2:length(x)
         scatter!(bifurcation, fill(x[j], length(y[j])), y[j],ms = 0.5, color = :black, legend = nothing,
