@@ -31,13 +31,15 @@ function generate_data_rational()
     save_object("Data/X_rational_unstable.jld2", X)
 end
 
-function generate_data_simulated()
+function generate_data_simulated(noise; filename = "Data/simulated_data.csv")
     initial_conditions = [1.3, 1.2, 1.1]
     expectations = fair_taylor_iteration(generate_dynamics_rational_speculators, parameters, initial_conditions, 100, 10, T)
-    X = generate_dynamics_rational_speculators(expectations, parameters, initial_conditions, noise = 0.1)
-    data = X[1]
+    X = generate_dynamics_rational_speculators(expectations, parameters, initial_conditions, noise = noise)
+    data = DataFrame(actual = X[1])
+    # add expectations to the data
+    data[!, :expectations] = expectations
     # save data to a CSV file in the Data folder
-    CSV.write("Data/simulated_data.csv", DataFrame(data = data))
+    CSV.write(filename, data)
     return data
 
 end
@@ -53,4 +55,11 @@ T = dict["T"]
 
 #generate_data_two_types()
 #generate_data_fundamentalist()
-data = generate_data_simulated()
+
+data = generate_data_simulated(0.0, filename = "Data/simulated_data_b7n0.csv")
+#Compute the mean of the squared of the column actual of data
+mean_squared = mean(data[!, :actual].^2)
+print(mean_squared)
+
+data100 = generate_data_simulated(sqrt(mean_squared/100), filename = "Data/simulated_data_b7n100.csv")
+data10 = generate_data_simulated(sqrt(mean_squared/10), filename = "Data/simulated_data_b7n10.csv")

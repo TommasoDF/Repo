@@ -1,5 +1,6 @@
 include("models.jl")
 using JLD2
+default(fontfamily = "Computer Modern", framestyle = :box)
 
 # Load the data
 X_b = load_object("Data/X_two_types.jld2")

@@ -192,8 +192,8 @@ function phase_plots(x,y;
     y1 = y[1:end]
 
     s = scatter(title = title)
-    xlabel!(L"x_{t-1}")
-    ylabel!(L"x_t")          
+    xlabel!(L"p_{t-1}")
+    ylabel!(L"p_t")          
     #create a color palette, similar to viridis
     l = @layout [a{0.95w} [b{0.001h}; c]]
     cmap = cgrad(:thermal, length(x)) #cgrad(:thermal)[1:L]
@@ -295,19 +295,19 @@ end
 
 function plot_evolution_and_fraction(X, rational;
     figsize = (900, 600),
-    linewidth = 4,
+    linewidth = 2,
     savefile = nothing)
     #Plot
 
     if rational
-        A = plot(X[1][end-100:end],label = nothing, color = :black, linewidth = linewidth, ylabel = "xₜ", size = figsize,margin = 15Plots.mm, xticks = nothing)
-        B = plot(X[6][end-100:end],  label = "trend following", linewidth = linewidth, xlabel = "t", ylabel = "fractions", size = figsize,margin = 15Plots.mm)
-        plot!(X[7][end-100:end], label = "bias", linewidth = linewidth)
+        A = plot(X[1][end-100:end],label = nothing, color = :black, linewidth = linewidth, ylabel = L"p_t", size = figsize,margin = 5Plots.mm, xticks = nothing, marker = :circle)
+        B = plot(X[6][end-100:end],  label = "trend following", linewidth = linewidth, marker = :circle, xlabel = L"t", ylabel = "fractions", size = figsize,margin = 5Plots.mm)
+        plot!(X[7][end-100:end], label = "bias", linewidth = linewidth, marker = :square)
         plot!(X[8][end-100:end], label = "rational", linewidth = linewidth)
     else
-        A = plot(X[:,1][end-100:end],label = nothing, color = :black, linewidth = linewidth, ylabel = "xₜ", size = figsize,margin = 15Plots.mm, xticks = nothing)
-        B = plot(X[:,4][end-100:end],  label = "trend following", linewidth = linewidth, xlabel = "t", ylabel = "fractions", size = figsize,margin = 15Plots.mm)
-        plot!(X[:,5][end-100:end], label = "bias", linewidth = linewidth)
+        A = plot(X[:,1][end-100:end],label = nothing, color = :black, linewidth = linewidth, ylabel = L"p_t", size = figsize,margin = 5Plots.mm, xticks = nothing, marker = :circle)
+        B = plot(X[:,4][end-100:end],  label = "trend following", linewidth = linewidth, marker = :circle, xlabel = L"t", ylabel = "fractions", size = figsize,margin = 5Plots.mm)
+        plot!(X[:,5][end-100:end], label = "bias", linewidth = linewidth, marker = :square)
         if size(X)[2] == 6
              plot!(X[:,6][end-100:end], label = "fundamentalist", linewidth = linewidth)
         end
@@ -326,7 +326,7 @@ function scatter_bifurcation(x,y;
     savefile = nothing
     )
     bifurcation = scatter(fill(x[1], length(y[1])), y[1],
-    	xaxis = L"$\beta$", ylabel = L"x", 
+    	xaxis = L"$\beta$", ylabel = L"p", 
     	ms = 0.5, color = :black, legend = nothing,
     	alpha = .050, title = title
     )

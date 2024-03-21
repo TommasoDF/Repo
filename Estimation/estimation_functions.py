@@ -31,7 +31,7 @@ color_orange = '#E57650'
 def trend_follower_plus_bias(x, g, b, beta):
     #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
     # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
-    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
+    # x9 = rational(t+1)/F, x10 = rational(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -45,7 +45,7 @@ def trend_follower_plus_bias(x, g, b, beta):
 def trend_follower_plus_bias_fractions(x, g, b, beta, a = 5.5):
     #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
     # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
-    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2 x12 = x(t-1)
+    # x9 = rational(t+1)/F, x10 = rational(t-2), x11 = x(t-2)**2 x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -58,7 +58,7 @@ def trend_follower_plus_bias_fractions(x, g, b, beta, a = 5.5):
 def trend_follower_plus_bias_plus_fundamentalists(x, g, b, beta):
    #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
     # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
-    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
+    # x9 = rational(t+1)/F, x10 = rational(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -74,7 +74,7 @@ def trend_follower_plus_bias_plus_fundamentalists(x, g, b, beta):
 def trend_follower_plus_bias_plus_fundamentalists_fractions(x, g, b, beta):
 #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
     # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
-    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
+    # x9 = rational(t+1)/F, x10 = rational(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -88,10 +88,10 @@ def trend_follower_plus_bias_plus_fundamentalists_fractions(x, g, b, beta):
     return  n1, n2, n3
 
 
-def trend_follower_plus_bias_plus_LSTM(x, g, b, beta):
+def trend_follower_plus_bias_plus_rational(x, g, b, beta):
     #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
     # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
-    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
+    # x9 = rational(t+1)/F, x10 = rational(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -104,9 +104,9 @@ def trend_follower_plus_bias_plus_LSTM(x, g, b, beta):
     n3 = np.exp(beta * (fitness_3))/(np.exp(beta * (fitness_1)) + np.exp(beta * (fitness_2)) + np.exp(beta * (fitness_3)))
     return  (g* x[0] * n1 + b*x[3] * (n2) + x[9]*n3)/x[6]
 
-def trend_follower_plus_bias_plus_LSTM_simulated(x, g, b, beta):
+def trend_follower_plus_bias_plus_rational_simulated(x, g, b, beta):
     #y = x(t), x0 = x(t-1), x1 = x(t-2), x2 = x(t-3)
-    # x3 =  LSTM(t+1), x4 = LSTM(t-2), x5 = R
+    # x3 =  rational(t+1), x4 = rational(t-2), x5 = R
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -120,10 +120,10 @@ def trend_follower_plus_bias_plus_LSTM_simulated(x, g, b, beta):
     return  (g* x[0] * n1 + b * (n2) + x[3]*n3)/x[5]
 
 
-def trend_follower_plus_bias_plus_LSTM_fractions(x, g, b, beta):
+def trend_follower_plus_bias_plus_rational_fractions(x, g, b, beta):
     #y = x(t), x0 = x(t-1)/F, x1 = x(t-2), x2 = x(t-3)
     # x3 = Bitsi(t-1)/F, x4 = Bitsi(t-2), x5 = Bitsi(t-3), x6 = R_t, x7 = R(t-1), x8 = R(t-2),
-    # x9 = LSTM(t+1)/F, x10 = LSTM(t-2), x11 = x(t-2)**2, x12 = x(t-1)
+    # x9 = rational(t+1)/F, x10 = rational(t-2), x11 = x(t-2)**2, x12 = x(t-1)
     # g = params[0]
     # b = params[1]
     # beta = params[2]
@@ -168,7 +168,7 @@ def fit_AR_model(df):
     results = model.fit()
     return results.ssr
 
-def fit_AR_model_LSTM(df):
+def fit_AR_model_rational(df):
     X = [df['x0'], df['x3']]
     X = np.transpose(X)
     y = (df['y']*df['x6']) - (1/3)*df['x9']
@@ -208,16 +208,16 @@ def test_and_plot_residuals(residuals, label = None, savefile = None):
     print('p-value:', het_arch(residuals)[3], 'for hetroskedasticity')
     return het_arch(residuals)[3]
 
-def plot_fractions(model, x_data, y_data, popt, savefile = None, LSTM = False):
+def plot_fractions(model, x_data, y_data, popt, savefile = None, rational = False):
     fig, ax = plt.subplots(figsize=(15,5))
     fractions = model(x_data, *popt)
-    ax.plot(fractions[0], color=color_orange, label = 'trend_follower')
-    ax.plot(fractions[1], color='green', label = 'bias')
+    ax.plot(fractions[0], color=color_blue, label = 'trend_follower')
+    ax.plot(fractions[1], color=color_orange, label = 'bias')
     if len(fractions) == 3:
-        if LSTM:
-            ax.plot(fractions[2], color= color_blue, label = 'LSTM')
+        if rational:
+            ax.plot(fractions[2], color= 'green', label = 'rational')
         else:
-            ax.plot(fractions[2], color= color_blue, label = 'fundamentalist')
+            ax.plot(fractions[2], color= 'green', label = 'fundamentalist')
     ax.set_ylabel('Fractions')
     #add lightgrey lines in the background
     ax.grid(color='lightgrey', linestyle='-', linewidth=0.5, alpha=0.5)
@@ -249,36 +249,36 @@ def main():
     # print('bias', popt_1, popt_1 / np.sqrt(np.diagonal(pcov_1)))
     popt_2, pcov_2 = estimate_params(trend_follower_plus_bias_plus_fundamentalists, x_data, y_data)
     # print('fund', popt_2, popt_2 / np.sqrt(np.diagonal(pcov_2)))
-    popt_3, pcov_3 = estimate_params(trend_follower_plus_bias_plus_LSTM, x_data, y_data)
+    popt_3, pcov_3 = estimate_params(trend_follower_plus_bias_plus_rational, x_data, y_data)
     tstat_1, tstat_2, tstat_3 = popt_1 / np.sqrt(np.diagonal(pcov_1)), popt_2 / np.sqrt(np.diagonal(pcov_2)), popt_3 / np.sqrt(np.diagonal(pcov_3))
     #print(popt_1 / np.sqrt(np.diagonal(pcov_1)))
     # #Compute r_squared and residuals
     residuals_1, ssres_1, adj_r2_1 = compute_r2_and_residuals(trend_follower_plus_bias, popt_1, x_data, y_data)
     residuals_2, ssres_2, adj_r2_2 = compute_r2_and_residuals(trend_follower_plus_bias_plus_fundamentalists, popt_2, x_data, y_data)
-    residuals_3, ssres_3, adj_r2_3 = compute_r2_and_residuals(trend_follower_plus_bias_plus_LSTM, popt_3, x_data, y_data)
+    residuals_3, ssres_3, adj_r2_3 = compute_r2_and_residuals(trend_follower_plus_bias_plus_rational, popt_3, x_data, y_data)
     print(residuals_1.mean())
     # #Plot residuals
     plot_acf_residuals(residuals_1, label = "trend_follower_plus_bias_ret")
     plot_acf_residuals(residuals_2, label = "trend_follower_plus_bias_plus_fundamentalists")
-    plot_acf_residuals(residuals_3, label= "trend_follower_plus_bias_plus_LSTM")
+    plot_acf_residuals(residuals_3, label= "trend_follower_plus_bias_plus_rational")
 
     # Compute ssr for restricted model
     RSS_R = fit_AR_model(df)
-    RSS_R_LSTM = fit_AR_model_LSTM(df)
+    RSS_R_rational = fit_AR_model_rational(df)
     # # Compute F-test
     F_1, p_1 = f_test_lag_and_bitsi(ssres_1, RSS_R, len(y_data))
     F_2, p_2 = f_test_lag_and_bitsi(ssres_2, RSS_R, len(y_data))
-    F_3, p_3 = f_test_lag_and_bitsi(ssres_3, RSS_R_LSTM, len(y_data))
+    F_3, p_3 = f_test_lag_and_bitsi(ssres_3, RSS_R_rational, len(y_data))
 
     # #Test and plot residuals
     het_1 = test_and_plot_residuals(residuals_1, label = "trend_follower_plus_bias", savefile=figures_folder + '/'  + 'residuals_trend_follower_plus_bias.png')
     het_2 = test_and_plot_residuals(residuals_2, label = "trend_follower_plus_bias_plus_fundamentalists", savefile=figures_folder + '/'  + 'residuals_trend_follower_plus_bias_plus_fundamentalists.png')
-    het_3 = test_and_plot_residuals(residuals_3, label= "trend_follower_plus_bias_plus_LSTM", savefile=figures_folder + '/' + 'residuals_trend_follower_plus_bias_plus_LSTM.png')
+    het_3 = test_and_plot_residuals(residuals_3, label= "trend_follower_plus_bias_plus_rational", savefile=figures_folder + '/' + 'residuals_trend_follower_plus_bias_plus_rational.png')
 
     # #Plot fractions
     plot_fractions(trend_follower_plus_bias_fractions, x_data, y_data, popt_1, savefile=figures_folder + '/' + 'fractions_trend_follower_plus_bias.png')
     plot_fractions(trend_follower_plus_bias_plus_fundamentalists_fractions, x_data, y_data, popt_2, savefile=figures_folder + '/' + 'fractions_trend_follower_plus_bias_plus_fundamentalists.png')
-    plot_fractions(trend_follower_plus_bias_plus_LSTM_fractions, x_data, y_data, popt_3, savefile=figures_folder + '/' + 'fractions_trend_follower_plus_bias_plus_LSTM.png', LSTM = True)
+    plot_fractions(trend_follower_plus_bias_plus_rational_fractions, x_data, y_data, popt_3, savefile=figures_folder + '/' + 'fractions_trend_follower_plus_bias_plus_rational.png', rational = True)
 
     # #Store the values in a dataframe. The columns are the models and the rows are the parameters
     params_df = pd.DataFrame()
@@ -286,7 +286,7 @@ def main():
     #g, tstatg, b, tstatb, beta, tstat_beta, adj_r2, F, p, het
     params_df['trend_follower_plus_bias'] = [popt_1[0], tstat_1[0], popt_1[1], tstat_1[1], popt_1[2], tstat_1[2], adj_r2_1, F_1, p_1, het_1]
     params_df['trend_follower_plus_bias_plus_fundamentalists'] = [popt_2[0], tstat_2[0], popt_2[1], tstat_2[1], popt_2[2], tstat_2[2], adj_r2_2, F_2, p_2, het_2]
-    params_df['trend_follower_plus_bias_plus_LSTM'] = [popt_3[0], tstat_3[0], popt_3[1], tstat_3[1], popt_3[2], tstat_3[2], adj_r2_3, F_3, p_3, het_3]
+    params_df['trend_follower_plus_bias_plus_rational'] = [popt_3[0], tstat_3[0], popt_3[1], tstat_3[1], popt_3[2], tstat_3[2], adj_r2_3, F_3, p_3, het_3]
     params_df.index = ['g', 'tstatg', 'b', 'tstatb', 'beta', 'tstat_beta', 'adj_r2', 'F', 'p', 'het']
 
     # #Keep only two decimals for every value
